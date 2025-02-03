@@ -21,4 +21,6 @@ class DjangoModule:
     def register(cls):
         cls._register_events()
 
-        cls.exc_plugin = DjangoExceptionPlugin(cls._on_exc_has_been_parsed_event_instance)
+        cls.exc_plugin = DjangoExceptionPlugin(
+            cls._on_exc_has_been_parsed_event_instance
+        )

@@ -1,10 +1,11 @@
 import pytest
 from channels.testing import HttpCommunicator  # type: ignore[import-untyped]
-from tests.django.mysite.asgi import application
-from errlypy.django.plugin import DjangoExceptionPlugin
+
 from errlypy.django.events import OnDjangoExceptionHasBeenParsedEvent
+from errlypy.django.plugin import DjangoExceptionPlugin
 from errlypy.internal.event.type import EventType
 from errlypy.lib import UninitializedPluginControllerImpl
+from tests.django.mysite.asgi import application
 
 
 @pytest.mark.asyncio

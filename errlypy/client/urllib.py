@@ -20,7 +20,9 @@ class URLLibClient:
 
     def post(self, url, data) -> None:
         json_data = json.dumps(data, cls=DataclassJsonEncoder).encode("utf-8")
-        request = urllib.request.Request(f"{self._base_url}/{url}", data=json_data, method="POST")
+        request = urllib.request.Request(
+            f"{self._base_url}/{url}", data=json_data, method="POST"
+        )
         request.add_header("Content-Type", "application/json")
 
         try:

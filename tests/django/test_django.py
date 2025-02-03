@@ -2,7 +2,10 @@ from unittest.mock import MagicMock, patch
 
 import django
 import pytest
-from django.core.handlers.exception import get_exception_response, response_for_exception
+from django.core.handlers.exception import (
+    get_exception_response,
+    response_for_exception,
+)
 from pytest import MonkeyPatch
 
 from errlypy.django.events import OnDjangoExceptionHasBeenParsedEvent
@@ -39,7 +42,9 @@ def test_response_for_exception_trigger(on_exc_parsed_fixture):
     mpatch.setattr(django.core.handlers.exception, "get_resolver", get_resolver_mock)
     mpatch.setattr(django.core.handlers.exception, "settings", get_settings_mock())
 
-    with patch.object(django_plugin, "__call__", wraps=django_plugin.__call__) as wrapped_call:
+    with patch.object(
+        django_plugin, "__call__", wraps=django_plugin.__call__
+    ) as wrapped_call:
         response_for_exception(request, exc)
 
         wrapped_call.call_count == 1
@@ -64,7 +69,9 @@ def test_get_exception_response_trigger(on_exc_parsed_fixture):
     mpatch = MonkeyPatch()
     mpatch.setattr(django.core.handlers.exception, "settings", get_settings_mock())
 
-    with patch.object(django_plugin, "__call__", wraps=django_plugin.__call__) as wrapped_call:
+    with patch.object(
+        django_plugin, "__call__", wraps=django_plugin.__call__
+    ) as wrapped_call:
         try:
             get_exception_response(request, resolver, status_code, exc)
         except Exception:
