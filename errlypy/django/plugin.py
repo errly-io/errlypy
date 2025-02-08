@@ -13,13 +13,9 @@ from errlypy.internal.event.type import EventType
 class DjangoExceptionPlugin(Plugin):
     def __init__(
         self,
-        on_exc_has_been_parsed_event_instance: EventType[
-            OnDjangoExceptionHasBeenParsedEvent
-        ],
+        on_exc_has_been_parsed_event_instance: EventType[OnDjangoExceptionHasBeenParsedEvent],
     ) -> None:
-        self._on_exc_has_been_parsed_event_instance = (
-            on_exc_has_been_parsed_event_instance
-        )
+        self._on_exc_has_been_parsed_event_instance = on_exc_has_been_parsed_event_instance
 
     def setup(self):
         self._callback = ExceptionCallbackImpl.create()

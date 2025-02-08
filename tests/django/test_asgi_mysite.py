@@ -14,9 +14,7 @@ async def test_asgi_zero_division():
 
     on_exc_has_been_parsed = EventType[OnDjangoExceptionHasBeenParsedEvent]()
 
-    UninitializedPluginControllerImpl.init(
-        plugins=[DjangoExceptionPlugin(on_exc_has_been_parsed)]
-    )
+    UninitializedPluginControllerImpl.init(plugins=[DjangoExceptionPlugin(on_exc_has_been_parsed)])
 
     resp = await communicator.get_response()
     await communicator.wait()
@@ -26,15 +24,11 @@ async def test_asgi_zero_division():
 
 @pytest.mark.asyncio
 async def test_asgi_zero_division_sleep_3_sec():
-    communicator = HttpCommunicator(
-        application, "GET", "/async-view-zero-division-sleep-3-sec"
-    )
+    communicator = HttpCommunicator(application, "GET", "/async-view-zero-division-sleep-3-sec")
 
     on_exc_has_been_parsed = EventType[OnDjangoExceptionHasBeenParsedEvent]()
 
-    UninitializedPluginControllerImpl.init(
-        plugins=[DjangoExceptionPlugin(on_exc_has_been_parsed)]
-    )
+    UninitializedPluginControllerImpl.init(plugins=[DjangoExceptionPlugin(on_exc_has_been_parsed)])
 
     resp = await communicator.get_response(5)
     await communicator.wait(5)
@@ -48,9 +42,7 @@ async def test_asgi_ok():
 
     on_exc_has_been_parsed = EventType[OnDjangoExceptionHasBeenParsedEvent]()
 
-    UninitializedPluginControllerImpl.init(
-        plugins=[DjangoExceptionPlugin(on_exc_has_been_parsed)]
-    )
+    UninitializedPluginControllerImpl.init(plugins=[DjangoExceptionPlugin(on_exc_has_been_parsed)])
 
     resp = await communicator.get_response()
     await communicator.wait()
@@ -64,9 +56,7 @@ async def test_asgi_ok_sleep_3_sec():
 
     on_exc_has_been_parsed = EventType[OnDjangoExceptionHasBeenParsedEvent]()
 
-    UninitializedPluginControllerImpl.init(
-        plugins=[DjangoExceptionPlugin(on_exc_has_been_parsed)]
-    )
+    UninitializedPluginControllerImpl.init(plugins=[DjangoExceptionPlugin(on_exc_has_been_parsed)])
 
     resp = await communicator.get_response(5)
     await communicator.wait(5)

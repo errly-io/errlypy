@@ -8,7 +8,11 @@ from errlypy.internal.config import HTTPErrorConfig
 # FIXME: Problem - cannot validate connection (it's valid or not) on init state, not in runtime
 class DjangoHTTPCallbackImpl:
     headers = None
-    urllib_client = URLLibClient("http://localhost:4000/api")
+    urllib_client = None
+
+    @classmethod
+    def initialize(cls, base_url: str, api_key: str):
+        cls.urllib_client = URLLibClient(base_url, api_key)
 
     @classmethod
     async def send_through_aiohttp(cls, data):

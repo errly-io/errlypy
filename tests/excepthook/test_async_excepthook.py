@@ -57,10 +57,7 @@ async def test_exception_callback_impl_result_frame_detail_body_success():
         result = sys.excepthook(type(err), err, err.__traceback__)
 
     frame_detail = cast(FrameDetail, result.frames[0])
-    assert (
-        frame_detail.function
-        == "test_exception_callback_impl_result_frame_detail_body_success"
-    )
+    assert frame_detail.function == "test_exception_callback_impl_result_frame_detail_body_success"
     assert frame_detail.line == 'raise ValueError("Test")'
     assert frame_detail.filename.endswith("test_async_excepthook.py") is True
     assert "pytest.monkeypatch.MonkeyPatch object at" in frame_detail.locals["mpatch"]

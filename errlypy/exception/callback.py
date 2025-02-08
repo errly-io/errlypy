@@ -5,7 +5,7 @@ from types import TracebackType
 from typing import Any, Dict, Optional, Type, cast
 
 from errlypy.api import ExceptionCallback, ExceptionCallbackWithContext, Extractor
-from errlypy.connection.http import HTTPConnection
+from errlypy.client.credentials import Credentials
 from errlypy.exception import FrameDetail, ParsedExceptionDto
 from errlypy.exception.stack import StackSummaryWrapper
 from errlypy.utils import has_contract_been_implemented
@@ -14,7 +14,7 @@ from errlypy.utils import has_contract_been_implemented
 @dataclass(frozen=True)
 class CreateExceptionCallbackMeta:
     dry_mode: bool = False
-    connection: Optional[HTTPConnection] = None
+    credentials: Optional[Credentials] = None
 
 
 class FrameExtractor(Extractor):
@@ -65,11 +65,7 @@ class ExceptionCallbackImpl(BaseExceptionCallbackImpl):
 
         for frame in frames:
             has_lib_path = next(
-                (
-                    True
-                    for lib_path in python_lib_paths
-                    if frame.filename.startswith(lib_path)
-                ),
+                (True for lib_path in python_lib_paths if frame.filename.startswith(lib_path)),
                 False,
             )
 
@@ -81,12 +77,8 @@ class ExceptionCallbackImpl(BaseExceptionCallbackImpl):
         if self._next_callback is None:
             return response
 
-        if has_contract_been_implemented(
-            self._next_callback, ExceptionCallbackWithContext
-        ):
-            self._next_callback = cast(
-                ExceptionCallbackWithContext, self._next_callback
-            )
+        if has_contract_been_implemented(self._next_callback, ExceptionCallbackWithContext):
+            self._next_callback = cast(ExceptionCallbackWithContext, self._next_callback)
             # TODO: Create dataclass for context
             self._next_callback.set_context(response)
 
