@@ -24,6 +24,9 @@ class EventType(Generic[T]):
     ) -> None:
         self._subscribers.remove(callback)
 
+    def unsubscribe_all(self) -> None:
+        self._subscribers = []
+
     def notify(self, message: T) -> None:
         try:
             loop = asyncio.get_running_loop()

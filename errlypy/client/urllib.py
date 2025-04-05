@@ -21,6 +21,7 @@ class URLLibClient:
 
     def post(self, url, data) -> None:
         json_data = json.dumps(data, cls=DataclassJsonEncoder).encode("utf-8")
+        print(json_data)
         request = urllib.request.Request(
             f"{self._base_url}/{url}",
             data=json_data,
@@ -37,7 +38,7 @@ class URLLibClient:
     def headers(self):
         return {
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {self._api_key}",
+            "X-Errly-Api-Key": self._api_key,
         }
 
     def setup_dns_cache(self):

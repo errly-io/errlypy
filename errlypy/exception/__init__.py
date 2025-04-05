@@ -13,5 +13,5 @@ class FrameDetail:
 
 @dataclass(frozen=True)
 class ParsedExceptionDto:
-    error: str
+    content: str
     frames: List[FrameDetail] = field(default_factory=list)

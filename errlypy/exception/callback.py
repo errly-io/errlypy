@@ -54,7 +54,7 @@ class ExceptionCallbackImpl(BaseExceptionCallbackImpl):
         exc_value: BaseException,
         exc_traceback: Optional[TracebackType],
     ) -> ParsedExceptionDto:
-        response = ParsedExceptionDto(error=str(exc_value))
+        response = ParsedExceptionDto(content=str(exc_value))
         python_lib_paths = sys.prefix, sys.base_prefix
         frame_extractor = FrameExtractor()
 

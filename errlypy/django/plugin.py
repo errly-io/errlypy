@@ -4,13 +4,13 @@ from uuid import uuid4
 
 from django.core.handlers import exception
 
-from errlypy.api import Plugin
+from errlypy.api import IPlugin
 from errlypy.django.events import OnDjangoExceptionHasBeenParsedEvent
 from errlypy.exception.callback import ExceptionCallbackImpl
 from errlypy.internal.event.type import EventType
 
 
-class DjangoExceptionPlugin(Plugin):
+class DjangoExceptionPlugin(IPlugin):
     def __init__(
         self,
         on_exc_has_been_parsed_event_instance: EventType[OnDjangoExceptionHasBeenParsedEvent],

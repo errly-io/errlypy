@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from collections import OrderedDict
 from types import TracebackType
-from typing import Any, List, Optional, Type
+from typing import Any, Optional, Type, Union
 
 from errlypy.exception import ParsedExceptionDto
 
@@ -35,7 +35,7 @@ class Extractor(ABC):
         pass
 
 
-class Plugin(ABC):
+class IPlugin(ABC):
     @abstractmethod
     def setup(self) -> None:
         pass
@@ -49,20 +49,30 @@ class Plugin(ABC):
         pass
 
 
-class UninitializedPluginController(ABC):
-    @staticmethod
+class IUninitializedModule(ABC):
+    @classmethod
     @abstractmethod
-    def init(plugins: List[Plugin]) -> "PluginController":
+    def setup(cls, base_url: str, api_key: str) -> Union["IModule", "IUninitializedModule"]:
         pass
 
 
-class PluginController(ABC):
-    _registry: OrderedDict[type, Plugin]
-
+class IModule(ABC):
+    @classmethod
     @abstractmethod
-    def register(self, *args) -> None:
+    def revert(cls) -> IUninitializedModule:
         pass
 
+
+class IUninitializedModuleController(ABC):
+    @classmethod
     @abstractmethod
-    def revert(self) -> UninitializedPluginController:
+    def init(cls, base_url: str, api_key: str) -> Union["IModuleController", "IUninitializedModuleController"]:
+        pass
+
+
+class IModuleController(ABC):
+    _registry: OrderedDict[type, IPlugin]
+
+    @abstractmethod
+    def revert(self) -> IUninitializedModuleController:
         pass

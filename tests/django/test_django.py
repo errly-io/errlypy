@@ -8,12 +8,22 @@ from pytest import MonkeyPatch
 from errlypy.django.events import OnDjangoExceptionHasBeenParsedEvent
 from errlypy.django.plugin import DjangoExceptionPlugin
 from errlypy.internal.event.type import EventType
-from errlypy.lib import UninitializedPluginControllerImpl
+from errlypy.lib import UninitializedModuleController
 
 
 @pytest.fixture
 def on_exc_parsed_fixture():
     return EventType[OnDjangoExceptionHasBeenParsedEvent]()
+
+
+@pytest.fixture
+def mock_django_module(monkeypatch, on_exc_parsed_fixture):
+    django_plugin = DjangoExceptionPlugin(on_exc_parsed_fixture)
+    mock_module = MagicMock()
+    mock_module.setup.return_value = mock_module
+    mock_module.plugins = [django_plugin]
+    monkeypatch.setattr("errlypy.lib.UninitializedDjangoModule", mock_module)
+    return mock_module, django_plugin
 
 
 def get_resolver_mock(*args):
@@ -28,12 +38,12 @@ def get_settings_mock(*args, env={}, **kwargs):
     return mock
 
 
-def test_response_for_exception_trigger(on_exc_parsed_fixture):
+def test_response_for_exception_trigger(mock_django_module):
+    mock_module, django_plugin = mock_django_module
     request = MagicMock()
     exc = Exception("Test")
 
-    django_plugin = DjangoExceptionPlugin(on_exc_parsed_fixture)
-    UninitializedPluginControllerImpl.init(plugins=[django_plugin])
+    UninitializedModuleController.init(base_url="test", api_key="test")
 
     mpatch = MonkeyPatch()
     mpatch.setattr(django.core.handlers.exception, "get_resolver", get_resolver_mock)
@@ -41,13 +51,13 @@ def test_response_for_exception_trigger(on_exc_parsed_fixture):
 
     with patch.object(django_plugin, "__call__", wraps=django_plugin.__call__) as wrapped_call:
         response_for_exception(request, exc)
-
         wrapped_call.call_count == 1
 
     mpatch.undo()
 
 
-def test_get_exception_response_trigger(on_exc_parsed_fixture):
+def test_get_exception_response_trigger(mock_django_module):
+    mock_module, django_plugin = mock_django_module
     request = MagicMock()
     resolver = MagicMock()
 
@@ -58,8 +68,7 @@ def test_get_exception_response_trigger(on_exc_parsed_fixture):
     status_code = 500
     exc = Exception("Test")
 
-    django_plugin = DjangoExceptionPlugin(on_exc_parsed_fixture)
-    UninitializedPluginControllerImpl.init(plugins=[django_plugin])
+    UninitializedModuleController.init(base_url="test", api_key="test")
 
     mpatch = MonkeyPatch()
     mpatch.setattr(django.core.handlers.exception, "settings", get_settings_mock())

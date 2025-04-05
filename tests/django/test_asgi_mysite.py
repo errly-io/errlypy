@@ -1,20 +1,34 @@
+from unittest.mock import MagicMock
+
 import pytest
 from channels.testing import HttpCommunicator  # type: ignore[import-untyped]
 
 from errlypy.django.events import OnDjangoExceptionHasBeenParsedEvent
 from errlypy.django.plugin import DjangoExceptionPlugin
 from errlypy.internal.event.type import EventType
-from errlypy.lib import UninitializedPluginControllerImpl
+from errlypy.lib import UninitializedModuleController
 from tests.django.mysite.asgi import application
 
 
+@pytest.fixture
+def mock_django_module(monkeypatch, on_exc_parsed_fixture):
+    django_plugin = DjangoExceptionPlugin(on_exc_parsed_fixture)
+    mock_module = MagicMock()
+    mock_module.setup.return_value = mock_module
+    mock_module.plugins = [django_plugin]
+    monkeypatch.setattr("errlypy.lib.UninitializedDjangoModule", mock_module)
+    return mock_module
+
+
+@pytest.fixture
+def on_exc_parsed_fixture():
+    return EventType[OnDjangoExceptionHasBeenParsedEvent]()
+
+
 @pytest.mark.asyncio
-async def test_asgi_zero_division():
+async def test_asgi_zero_division(mock_django_module):
     communicator = HttpCommunicator(application, "GET", "/async-view-zero-division")
-
-    on_exc_has_been_parsed = EventType[OnDjangoExceptionHasBeenParsedEvent]()
-
-    UninitializedPluginControllerImpl.init(plugins=[DjangoExceptionPlugin(on_exc_has_been_parsed)])
+    UninitializedModuleController.init(base_url="test", api_key="test")
 
     resp = await communicator.get_response()
     await communicator.wait()
@@ -23,12 +37,9 @@ async def test_asgi_zero_division():
 
 
 @pytest.mark.asyncio
-async def test_asgi_zero_division_sleep_3_sec():
+async def test_asgi_zero_division_sleep_3_sec(mock_django_module):
     communicator = HttpCommunicator(application, "GET", "/async-view-zero-division-sleep-3-sec")
-
-    on_exc_has_been_parsed = EventType[OnDjangoExceptionHasBeenParsedEvent]()
-
-    UninitializedPluginControllerImpl.init(plugins=[DjangoExceptionPlugin(on_exc_has_been_parsed)])
+    UninitializedModuleController.init(base_url="test", api_key="test")
 
     resp = await communicator.get_response(5)
     await communicator.wait(5)
@@ -37,12 +48,9 @@ async def test_asgi_zero_division_sleep_3_sec():
 
 
 @pytest.mark.asyncio
-async def test_asgi_ok():
+async def test_asgi_ok(mock_django_module):
     communicator = HttpCommunicator(application, "GET", "/async-view-ok")
-
-    on_exc_has_been_parsed = EventType[OnDjangoExceptionHasBeenParsedEvent]()
-
-    UninitializedPluginControllerImpl.init(plugins=[DjangoExceptionPlugin(on_exc_has_been_parsed)])
+    UninitializedModuleController.init(base_url="test", api_key="test")
 
     resp = await communicator.get_response()
     await communicator.wait()
@@ -51,12 +59,9 @@ async def test_asgi_ok():
 
 
 @pytest.mark.asyncio
-async def test_asgi_ok_sleep_3_sec():
+async def test_asgi_ok_sleep_3_sec(mock_django_module):
     communicator = HttpCommunicator(application, "GET", "/async-view-ok-sleep-3-sec")
-
-    on_exc_has_been_parsed = EventType[OnDjangoExceptionHasBeenParsedEvent]()
-
-    UninitializedPluginControllerImpl.init(plugins=[DjangoExceptionPlugin(on_exc_has_been_parsed)])
+    UninitializedModuleController.init(base_url="test", api_key="test")
 
     resp = await communicator.get_response(5)
     await communicator.wait(5)
