@@ -24,7 +24,10 @@ jobs:
     - name: Verify Python version
       run: python --version
     - name: Install uv
-      run: curl -LsSf https://astral.sh/uv/install.sh | sh
+      run: |
+        python -m venv .venv
+        source .venv/bin/activate
+        curl -LsSf https://astral.sh/uv/install.sh | sh
     - name: Configure uv to use project venv
       run: ~/.local/bin/uv venv .venv
     - name: Generate requirements-dev.lock
