@@ -6,16 +6,16 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def view_zero_division(request):
-    1 / 0
+    1 / 0  # noqa: B018
 
 
 async def async_view_zero_division(request):
-    1 / 0
+    1 / 0  # noqa: B018
 
 
 async def async_view_zero_division_sleep_3_sec(request):
     await asyncio.sleep(3)
-    1 / 0
+    1 / 0  # noqa: B018
 
 
 async def async_view_ok(request):

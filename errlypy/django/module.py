@@ -15,15 +15,18 @@ class UninitializedDjangoModule(IUninitializedModule):
     Represents the uninitialized state of the Django module.
     Handles configuration and initialization of Django-specific components.
     """
-    _instance: ClassVar[Optional['UninitializedDjangoModule']] = None
 
-    def __new__(cls) -> 'UninitializedDjangoModule':
+    _instance: ClassVar[Optional["UninitializedDjangoModule"]] = None
+
+    def __new__(cls) -> "UninitializedDjangoModule":
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
 
     @staticmethod
-    def _initialize_plugin(exc_has_been_parsed_event: EventType[OnDjangoExceptionHasBeenParsedEvent]) -> DjangoExceptionPlugin:
+    def _initialize_plugin(
+        exc_has_been_parsed_event: EventType[OnDjangoExceptionHasBeenParsedEvent],
+    ) -> DjangoExceptionPlugin:
         """Initializes and sets up the Django exception plugin."""
         plugin = DjangoExceptionPlugin(exc_has_been_parsed_event)
         plugin.setup()
@@ -87,11 +90,12 @@ class DjangoModule(IModule):
     Represents the initialized state of the Django module.
     Manages plugins and events for Django exception handling.
     """
-    _instance: ClassVar[Optional['DjangoModule']] = None
+
+    _instance: ClassVar[Optional["DjangoModule"]] = None
     _plugins: List[DjangoExceptionPlugin]
     _events: List[EventType]
 
-    def __new__(cls, *args, **kwargs) -> 'DjangoModule':
+    def __new__(cls, *args, **kwargs) -> "DjangoModule":
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance

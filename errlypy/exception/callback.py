@@ -34,7 +34,7 @@ class BaseExceptionCallbackImpl(ExceptionCallback):
 
     @classmethod
     def create(
-        cls, context: Dict[str, Any] = dict(), meta=CreateExceptionCallbackMeta()
+        cls, context: Dict[str, Any], meta: CreateExceptionCallbackMeta
     ) -> "BaseExceptionCallbackImpl":
         instance = cls()
         instance._context = context

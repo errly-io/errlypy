@@ -7,9 +7,7 @@ import traceback
 
 class StackSummaryWrapper(traceback.StackSummary):
     @classmethod
-    def extract(
-        klass, frame_gen, *, limit=None, lookup_lines=True, capture_locals=True
-    ):
+    def extract(klass, frame_gen, *, limit=None, lookup_lines=True, capture_locals=True):
         def extended_frame_gen():
             for f, lineno in frame_gen:
                 yield f, lineno
@@ -45,10 +43,7 @@ class StackSummaryWrapper(traceback.StackSummary):
             fnames.add(filename)
             linecache.lazycache(filename, f.f_globals)
 
-            if capture_locals:
-                f_locals = f.f_locals
-            else:
-                f_locals = None
+            f_locals = f.f_locals if capture_locals else None
 
             try:
                 frame_summary = traceback.FrameSummary(
@@ -63,8 +58,4 @@ class StackSummaryWrapper(traceback.StackSummary):
             result.append(frame_summary)
         for filename in fnames:
             linecache.checkcache(filename)
-
-        if lookup_lines:
-            for f in result:
-                f.line
         return result

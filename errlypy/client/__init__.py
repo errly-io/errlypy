@@ -9,15 +9,15 @@ from errlypy.internal.config import HTTPErrorConfig
 
 class UninitializedHTTPClient:
     @classmethod
-    def setup(cls, base_url: str, api_key: str) -> 'HTTPClient':
+    def setup(cls, base_url: str, api_key: str) -> "HTTPClient":
         return HTTPClient(client=URLLibClient(base_url, api_key))
 
 
 class HTTPClient:
-    _instance: ClassVar[Optional['HTTPClient']] = None
+    _instance: ClassVar[Optional["HTTPClient"]] = None
     _client: URLLibClient
 
-    def __new__(cls, *args, **kwargs) -> 'HTTPClient':
+    def __new__(cls, *args, **kwargs) -> "HTTPClient":
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance

@@ -11,22 +11,26 @@ from errlypy.internal.event.type import EventType
 
 
 class UninitializedExceptHookModule(IUninitializedModule):
-    _instance: ClassVar[Optional['UninitializedExceptHookModule']] = None
+    _instance: ClassVar[Optional["UninitializedExceptHookModule"]] = None
 
-    def __new__(cls) -> 'UninitializedExceptHookModule':
+    def __new__(cls) -> "UninitializedExceptHookModule":
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
 
     @staticmethod
-    def _initialize_plugin(on_exception_has_been_parsed_event: EventType[OnExceptionHasBeenParsedEvent]) -> ExceptHookPlugin:
+    def _initialize_plugin(
+        on_exception_has_been_parsed_event: EventType[OnExceptionHasBeenParsedEvent],
+    ) -> ExceptHookPlugin:
         plugin = ExceptHookPlugin(on_exception_has_been_parsed_event)
         plugin.setup()
 
         return plugin
 
     @classmethod
-    def setup(cls, base_url: str, api_key: str) -> Union['ExceptHookModule', 'UninitializedExceptHookModule']:
+    def setup(
+        cls, base_url: str, api_key: str
+    ) -> Union["ExceptHookModule", "UninitializedExceptHookModule"]:
         http_client = HTTPClient(
             client=URLLibClient(
                 base_url=base_url,
@@ -49,11 +53,12 @@ class UninitializedExceptHookModule(IUninitializedModule):
 
         return ExceptHookModule(plugins=[plugin])
 
+
 class ExceptHookModule(IModule):
-    _instance: ClassVar[Optional['ExceptHookModule']] = None
+    _instance: ClassVar[Optional["ExceptHookModule"]] = None
     _plugins: List[IPlugin]
 
-    def __new__(cls, *args, **kwargs) -> 'ExceptHookModule':
+    def __new__(cls, *args, **kwargs) -> "ExceptHookModule":
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance

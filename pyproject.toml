@@ -1,37 +1,38 @@
-[tool.poetry]
+[project]
 name = "errlypy"
 version = "0.1.0"
 description = ""
-authors = ["Evgeniy Vdovin <enjoyintheheat@gmail.com>"]
+authors = [
+    { name = "Evgeniy Vdovin", email = "enjoyintheheat@gmail.com" }
+]
 readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "django>=4.2,<5.0",
+    "aiohttp>=3.9.3,<4.0",
+    "channels[daphne]>=4.1.0,<5.0",
+]
 
-[tool.black]
+[project.optional-dependencies]
+dev = [
+    "pytest==7.4.4",
+    "pre-commit>=3.6.0,<4.0",
+    "mypy>=1.8.0,<2.0",
+    "ruff>=0.1.15,<0.2",
+    "pytest-asyncio>=0.23.4,<0.24",
+    "types-mock>=5.1.0.20240106,<6.0",
+    "werkzeug>=3.0.3,<4.0",
+    "coverage>=7.6.12,<8.0",
+    "uv>=0.1.18",
+]
+
+[tool.ruff]
 line-length = 100
 
-[tool.isort]
-profile = "black"
-line_length = 100
-lines_between_sections = 1
-
-[tool.poetry.dependencies]
-python = "^3.9"
-django = "^4.2"
-aiohttp = "^3.9.3"
-channels = {extras = ["daphne"], version = "^4.1.0"}
-
-
-[tool.poetry.group.dev.dependencies]
-pytest = "7.4.4"
-pre-commit = "^3.6.0"
-mypy = "^1.8.0"
-ruff = "^0.1.15"
-black = "^24.1.1"
-pytest-asyncio = "^0.23.4"
-types-mock = "^5.1.0.20240106"
-isort = "^5.13.2"
-werkzeug = "^3.0.3"
-coverage = "^7.6.12"
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "C4", "SIM", "I"]
+ignore = []
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"

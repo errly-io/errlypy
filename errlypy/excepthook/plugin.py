@@ -13,9 +13,9 @@ class ExceptHookPlugin(IPlugin):
     original_excepthook: Optional[Callable] = None
 
     def __init__(
-            self,
-            on_exception_has_been_parsed_event: EventType[OnExceptionHasBeenParsedEvent],
-        ) -> None:
+        self,
+        on_exception_has_been_parsed_event: EventType[OnExceptionHasBeenParsedEvent],
+    ) -> None:
         self._on_exception_has_been_parsed_event = on_exception_has_been_parsed_event
 
     def setup(self):

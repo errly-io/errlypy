@@ -1,17 +1,12 @@
 install_hooks:
-	poetry run pre-commit install
-
-black:
-	poetry run black .
+	uv run pre-commit install
 
 ruff:
-	poetry run ruff .
+	uv run ruff check . --fix
+	uv run ruff format .
 
 mypy:
-	poetry run mypy .
+	uv run mypy .
 
 test:
-	poetry run pytest
-
-sort:
-	poetry run isort --atomic .
+	uv run pytest

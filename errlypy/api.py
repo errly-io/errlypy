@@ -66,7 +66,9 @@ class IModule(ABC):
 class IUninitializedModuleController(ABC):
     @classmethod
     @abstractmethod
-    def init(cls, base_url: str, api_key: str) -> Union["IModuleController", "IUninitializedModuleController"]:
+    def init(
+        cls, base_url: str, api_key: str
+    ) -> Union["IModuleController", "IUninitializedModuleController"]:
         pass
 
 

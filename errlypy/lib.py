@@ -10,7 +10,9 @@ class UninitializedModuleController(
     IUninitializedModuleController,
 ):
     @staticmethod
-    def init(base_url: str, api_key: str) -> Union["IModuleController", "IUninitializedModuleController"]:
+    def init(
+        base_url: str, api_key: str
+    ) -> Union["IModuleController", "IUninitializedModuleController"]:
         django_module = UninitializedDjangoModule.setup(base_url=base_url, api_key=api_key)
         excepthook_module = UninitializedExceptHookModule.setup(base_url=base_url, api_key=api_key)
         modules = [django_module, excepthook_module]
@@ -31,11 +33,11 @@ class UninitializedModuleController(
 
 
 class ModuleController(IModuleController):
-    _instance: ClassVar[Optional['ModuleController']] = None
+    _instance: ClassVar[Optional["ModuleController"]] = None
     _modules: List[IModule]
     _events: List[EventType]
 
-    def __new__(cls, *args, **kwargs) -> 'ModuleController':
+    def __new__(cls, *args, **kwargs) -> "ModuleController":
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
