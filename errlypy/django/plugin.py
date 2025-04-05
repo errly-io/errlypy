@@ -6,7 +6,7 @@ from django.core.handlers import exception
 
 from errlypy.api import IPlugin
 from errlypy.django.events import OnDjangoExceptionHasBeenParsedEvent
-from errlypy.exception.callback import ExceptionCallbackImpl
+from errlypy.exception.callback import CreateExceptionCallbackMeta, ExceptionCallbackImpl
 from errlypy.internal.event.type import EventType
 
 
@@ -18,7 +18,7 @@ class DjangoExceptionPlugin(IPlugin):
         self._on_exc_has_been_parsed_event_instance = on_exc_has_been_parsed_event_instance
 
     def setup(self):
-        self._callback = ExceptionCallbackImpl.create()
+        self._callback = ExceptionCallbackImpl.create({}, CreateExceptionCallbackMeta())
         self._original_fn = exception.handle_uncaught_exception
         exception.handle_uncaught_exception = self
 
