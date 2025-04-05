@@ -21,13 +21,8 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Verify Python version
-      run: python --version
     - name: Install uv
-      run: |
-        python -m venv .venv
-        source .venv/bin/activate
-        curl -LsSf https://astral.sh/uv/install.sh | sh
+      run: curl -LsSf https://astral.sh/uv/install.sh | sh
     - name: Configure uv to use project venv
       run: ~/.local/bin/uv venv .venv
     - name: Generate requirements-dev.lock
