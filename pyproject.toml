@@ -11,6 +11,8 @@ dependencies = [
     "django>=4.2,<5.0",
     "aiohttp>=3.9.3,<4.0",
     "channels[daphne]>=4.1.0,<5.0",
+    "starlette>=0.46.1",
+    "fastapi>=0.115.12",
 ]
 
 [project.optional-dependencies]

@@ -37,7 +37,7 @@ class Extractor(ABC):
 
 class IPlugin(ABC):
     @abstractmethod
-    def setup(self) -> None:
+    def setup(self, *args, **kwargs) -> None:
         pass
 
     @abstractmethod

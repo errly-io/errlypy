@@ -28,8 +28,8 @@ class UninitializedDjangoModule(IUninitializedModule):
         exc_has_been_parsed_event: EventType[OnDjangoExceptionHasBeenParsedEvent],
     ) -> DjangoExceptionPlugin:
         """Initializes and sets up the Django exception plugin."""
-        plugin = DjangoExceptionPlugin(exc_has_been_parsed_event)
-        plugin.setup()
+        plugin = DjangoExceptionPlugin()
+        plugin.setup(exc_has_been_parsed_event)
 
         return plugin
 

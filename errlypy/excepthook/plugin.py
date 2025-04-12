@@ -14,11 +14,10 @@ class ExceptHookPlugin(IPlugin):
 
     def __init__(
         self,
-        on_exception_has_been_parsed_event: EventType[OnExceptionHasBeenParsedEvent],
-    ) -> None:
-        self._on_exception_has_been_parsed_event = on_exception_has_been_parsed_event
+    ) -> None: ...
 
-    def setup(self):
+    def setup(self, on_exception_has_been_parsed_event: EventType[OnExceptionHasBeenParsedEvent]):
+        self._on_exception_has_been_parsed_event = on_exception_has_been_parsed_event
         self.original_excepthook = sys.excepthook
         sys.excepthook = self
 

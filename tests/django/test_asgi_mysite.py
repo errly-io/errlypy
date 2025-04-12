@@ -11,8 +11,8 @@ from tests.django.mysite.asgi import application
 
 
 @pytest.fixture
-def mock_django_module(monkeypatch, on_exc_parsed_fixture):
-    django_plugin = DjangoExceptionPlugin(on_exc_parsed_fixture)
+def mock_django_module(monkeypatch):
+    django_plugin = DjangoExceptionPlugin()
     mock_module = MagicMock()
     mock_module.setup.return_value = mock_module
     mock_module.plugins = [django_plugin]

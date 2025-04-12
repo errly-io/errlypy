@@ -13,11 +13,13 @@ from errlypy.internal.event.type import EventType
 class DjangoExceptionPlugin(IPlugin):
     def __init__(
         self,
-        on_exc_has_been_parsed_event_instance: EventType[OnDjangoExceptionHasBeenParsedEvent],
-    ) -> None:
-        self._on_exc_has_been_parsed_event_instance = on_exc_has_been_parsed_event_instance
+    ) -> None: ...
 
-    def setup(self):
+    def setup(
+        self,
+        on_exc_has_been_parsed_event_instance: EventType[OnDjangoExceptionHasBeenParsedEvent],
+    ):
+        self._on_exc_has_been_parsed_event_instance = on_exc_has_been_parsed_event_instance
         self._callback = ExceptionCallbackImpl.create({}, CreateExceptionCallbackMeta())
         self._original_fn = exception.handle_uncaught_exception
         exception.handle_uncaught_exception = self

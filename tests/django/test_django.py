@@ -21,8 +21,8 @@ def on_exc_parsed_fixture():
 
 @pytest.fixture
 def mock_django_module(monkeypatch, on_exc_parsed_fixture, request):
-    django_plugin = DjangoExceptionPlugin(on_exc_parsed_fixture)
-    django_plugin.setup()
+    django_plugin = DjangoExceptionPlugin()
+    django_plugin.setup(on_exc_parsed_fixture)
     request.addfinalizer(django_plugin.revert)
 
     mock_initialized_django_module = MagicMock()

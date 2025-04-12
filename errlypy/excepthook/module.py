@@ -22,8 +22,8 @@ class UninitializedExceptHookModule(IUninitializedModule):
     def _initialize_plugin(
         on_exception_has_been_parsed_event: EventType[OnExceptionHasBeenParsedEvent],
     ) -> ExceptHookPlugin:
-        plugin = ExceptHookPlugin(on_exception_has_been_parsed_event)
-        plugin.setup()
+        plugin = ExceptHookPlugin()
+        plugin.setup(on_exception_has_been_parsed_event)
 
         return plugin
 
