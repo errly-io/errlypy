@@ -13,3 +13,7 @@ build
 *.pyc
 .direnv
 .cursor
+
+# Pact files (generated contracts)
+pacts/*.json
+logs/

@@ -51,6 +51,7 @@ class UninitializedFastAPIModule(IUninitializedModule):
         cls,
         base_url: str,
         api_key: str,
+        environment: str = "production",
         app: Optional[FastAPI] = None,
         plugin: Optional[FastAPIExceptionPlugin] = None,
     ) -> Union["IModule", "IUninitializedModule"]:
@@ -79,6 +80,7 @@ class UninitializedFastAPIModule(IUninitializedModule):
                 base_url=base_url,
                 api_key=api_key,
             ),
+            environment=environment,
         )
 
         exc_has_been_parsed_event = EventType[OnFastAPIExceptionHasBeenParsedEvent]()

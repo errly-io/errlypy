@@ -1,2 +1,2 @@
 class HTTPErrorConfig:
-    endpoint: str = "issues"
+    endpoint: str = "api/v1/ingest"

@@ -44,7 +44,9 @@ class UninitializedDjangoModule(IUninitializedModule):
         return True
 
     @classmethod
-    def setup(cls, base_url: str, api_key: str) -> Union["IModule", "IUninitializedModule"]:
+    def setup(
+        cls, base_url: str, api_key: str, environment: str = "production"
+    ) -> Union["IModule", "IUninitializedModule"]:
         """
         Initializes the Django module and transitions to initialized state.
 
@@ -64,6 +66,7 @@ class UninitializedDjangoModule(IUninitializedModule):
                 base_url=base_url,
                 api_key=api_key,
             ),
+            environment=environment,
         )
 
         exc_has_been_parsed_event = EventType[OnDjangoExceptionHasBeenParsedEvent]()

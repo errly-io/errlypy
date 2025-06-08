@@ -1,0 +1,59 @@
+name: Pact Consumer Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[dev]"
+    
+    - name: Run Pact consumer tests
+      run: |
+        python -m pytest tests/pact/test_consumer.py -v
+    
+    - name: Upload pact files as artifacts
+      uses: actions/upload-artifact@v3
+      if: success()
+      with:
+        name: pact-contracts-${{ github.sha }}
+        path: pacts/*.json
+        retention-days: 90
+
+    - name: Upload pact files to release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: pacts/*.json
+        body: |
+          ## Pact Contracts
+
+          This release includes Pact contracts for the Python SDK:
+          - `errlypythonsdk-errlygoapi.json` - Contract between Python SDK and Golang API
+
+          ### Usage for Provider Team
+          1. Download the contract file from this release
+          2. Use it to implement provider tests in your Golang API
+          3. Ensure your API satisfies the contract requirements
+
+          ### Contract Details
+          - Consumer: ErrlyPythonSDK
+          - Provider: ErrlyGoAPI
+          - Generated from commit: ${{ github.sha }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

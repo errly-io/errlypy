@@ -52,7 +52,9 @@ class IPlugin(ABC):
 class IUninitializedModule(ABC):
     @classmethod
     @abstractmethod
-    def setup(cls, base_url: str, api_key: str) -> Union["IModule", "IUninitializedModule"]:
+    def setup(
+        cls, base_url: str, api_key: str, environment: str = "production"
+    ) -> Union["IModule", "IUninitializedModule"]:
         pass
 
 
@@ -67,7 +69,7 @@ class IUninitializedModuleController(ABC):
     @classmethod
     @abstractmethod
     def init(
-        cls, base_url: str, api_key: str
+        cls, base_url: str, api_key: str, environment: str = "production"
     ) -> Union["IModuleController", "IUninitializedModuleController"]:
         pass
 
